@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220" width="800" height="220" role="img" aria-label="multi-agent：主路由判断，子 agent 执行，只读沙箱验收">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="0.55" stop-color="#151a3a"/>
+      <stop offset="1" stop-color="#241a4d"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#a5b4fc"/>
+    </linearGradient>
+    <linearGradient id="routerFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8b5cf6" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1"/>
+    </pattern>
+    <clipPath id="frame"><rect width="800" height="220" rx="18"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="220" fill="url(#bg)"/>
+    <rect width="800" height="220" fill="url(#grid)"/>
+    <circle cx="520" cy="110" r="150" fill="url(#glow)"/>
+  </g>
+
+  <g font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+    <text x="44" y="96" font-size="50" font-weight="700" fill="url(#title)" letter-spacing="-0.5">multi-agent</text>
+    <text x="46" y="134" font-size="17" fill="#e2e8f0">主路由判断，子 agent 执行，只读沙箱验收</text>
+    <text x="46" y="164" font-size="13" fill="#94a3b8">默认不派 · 按任务选模型和强度 · 能确定的事交给脚本</text>
+
+    <g fill="none" stroke-width="2" stroke-linecap="round">
+      <path id="toMain" d="M568 110 C 604 110, 604 52, 636 52" stroke="#60a5fa" stroke-opacity="0.75"/>
+      <path id="toLight" d="M568 110 L636 110" stroke="#fbbf24" stroke-opacity="0.75"/>
+      <path id="toVerify" d="M568 110 C 604 110, 604 168, 636 168" stroke="#34d399" stroke-opacity="0.75"/>
+    </g>
+
+    <circle r="3.5" fill="#bfdbfe">
+      <animateMotion dur="2.8s" repeatCount="indefinite"><mpath href="#toMain"/></animateMotion>
+    </circle>
+    <circle r="3.5" fill="#fde68a">
+      <animateMotion dur="2.8s" begin="0.9s" repeatCount="indefinite"><mpath href="#toLight"/></animateMotion>
+    </circle>
+    <circle r="3.5" fill="#a7f3d0">
+      <animateMotion dur="2.8s" begin="1.8s" repeatCount="indefinite"><mpath href="#toVerify"/></animateMotion>
+    </circle>
+
+    <rect x="456" y="84" width="112" height="52" rx="12" fill="url(#routerFill)"/>
+    <text x="512" y="116" font-size="17" font-weight="600" fill="#ffffff" text-anchor="middle">主路由</text>
+
+    <g font-size="14" font-weight="600" text-anchor="middle">
+      <rect x="636" y="34" width="132" height="36" rx="10" fill="#0f1b33" stroke="#60a5fa"/>
+      <text x="702" y="57" fill="#bfdbfe">主力子 agent</text>
+      <rect x="636" y="92" width="132" height="36" rx="10" fill="#2a2110" stroke="#fbbf24"/>
+      <text x="702" y="115" fill="#fde68a">轻量子 agent</text>
+      <rect x="636" y="150" width="132" height="36" rx="10" fill="#0d2a22" stroke="#34d399"/>
+      <text x="702" y="173" fill="#a7f3d0">只读验证</text>
+    </g>
+  </g>
+</svg>

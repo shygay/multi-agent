@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "criteria", "notes", "human_action"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["ready", "blocked", "failed"]
+    },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion", "result", "evidence"],
+        "properties": {
+          "criterion": { "type": "string" },
+          "result": {
+            "type": "string",
+            "enum": ["pass", "fail", "not_verified"]
+          },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "notes": { "type": "string" },
+    "human_action": { "type": "string" }
+  }
+}
