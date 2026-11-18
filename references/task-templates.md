@@ -2,7 +2,7 @@
 
 ## 派工命令
 
-都放后台跑。尖括号是要填的内容，`<skill 目录>` 是这个 skill 所在的目录。模型和强度按 SKILL.md §3 判断。脚本默认读 `local.env`，命令行上写的优先。
+都放后台跑。尖括号是要填的内容，`<skill 目录>` 是这个 skill 所在的目录。模型和强度按 SKILL.md §3 判断。脚本默认读 `local.env`，命令行上写的优先。命令里不写型号：`WORKER_MODEL`、`LIGHT_MODEL` 为空时，脚本调 `local.env` 的 `worker_latest_model`、`light_latest_model` 现查最新的。
 
 **主力子 agent，只读**：
 

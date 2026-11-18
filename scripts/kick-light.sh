@@ -7,7 +7,7 @@
 # 每次调用都追加一行到账本，超过单日上限就拒绝再派。
 #
 # 环境变量（也可以写进 local.env，命令行上的优先）:
-#   LIGHT_MODEL         不设时用它自己的默认模型
+#   LIGHT_MODEL         不设时调 local.env 的 light_latest_model 现查最新型号；查不到用它自己的默认模型
 #   LIGHT_STRONG_MODEL  更强的模型。设了 LIGHT_USE_STRONG=1 时用它
 #   LIGHT_DAILY_MAX     单日最多调用次数，默认 8
 #   LIGHT_LEDGER        账本路径，默认 skill 根目录的 light-ledger.tsv
@@ -35,6 +35,7 @@ ROOT="$(cd "$HERE/.." && pwd)"
 type light_run > /dev/null 2>&1 || { echo "LIGHT_EXIT 2 local.env 里没有定义 light_run。轻量子 agent 是可选的，没有时小活给主力子 agent"; exit 2; }
 
 [ "${LIGHT_USE_STRONG:-}" = 1 ] && LIGHT_MODEL="${LIGHT_STRONG_MODEL:-${LIGHT_MODEL:-}}"
+[ -z "${LIGHT_MODEL:-}" ] && type light_latest_model > /dev/null 2>&1 && LIGHT_MODEL="$(light_latest_model 2>/dev/null)"
 export LIGHT_MODEL="${LIGHT_MODEL:-}"
 MAX="${LIGHT_DAILY_MAX:-8}"
 LEDGER="${LIGHT_LEDGER:-$ROOT/light-ledger.tsv}"

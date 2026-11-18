@@ -14,7 +14,7 @@
 #   LOOP_TEST_CMD   验收测试命令，退出码 0 = 通过（必填）
 #   LOOP_BUILD_CMD  构建命令（可空）
 #   LOOP_WORK_DIR   反馈与日志的存放目录（相对工作目录），默认 out。脚本会把它排除出提交
-#   WORKER_MODEL    不设时用子 agent 自己的默认模型
+#   WORKER_MODEL    不设时调 local.env 的 worker_latest_model 现查最新型号；查不到用子 agent 自己的默认模型
 #   WORKER_EFFORT   不设时用子 agent 自己的默认强度
 #   KICK_TIMEOUT    每轮墙钟上限（秒），默认 3600
 #   IMPL_AUTHOR     代提交时的 author，默认 "Sub-agent <sub-agent@local>"
@@ -42,6 +42,7 @@ LOOP_BUILD_CMD="${LOOP_BUILD_CMD:-}"
 LOOP_WORK_DIR="${LOOP_WORK_DIR:-out}"
 TIMEOUT="${KICK_TIMEOUT:-3600}"
 IMPL_AUTHOR="${IMPL_AUTHOR:-Sub-agent <sub-agent@local>}"
+[ -z "${WORKER_MODEL:-}" ] && type worker_latest_model > /dev/null 2>&1 && WORKER_MODEL="$(worker_latest_model 2>/dev/null)"
 export WORKER_MODEL="${WORKER_MODEL:-}"
 export WORKER_EFFORT="${WORKER_EFFORT:-}"
 

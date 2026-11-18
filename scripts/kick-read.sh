@@ -6,7 +6,7 @@
 # 路径都用绝对路径，结果文件放在工作区外。
 #
 # 环境变量（也可以写进 local.env，命令行上的优先）:
-#   WORKER_MODEL   不设时用子 agent 自己的默认模型
+#   WORKER_MODEL   不设时调 local.env 的 worker_latest_model 现查最新型号；查不到用子 agent 自己的默认模型
 #   WORKER_EFFORT  默认 medium
 #   READ_TIMEOUT   墙钟上限（秒），默认 1200
 #   READ_SCHEMA    JSON schema 文件，要求按固定格式输出（可空）
@@ -27,6 +27,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 type worker_run > /dev/null 2>&1 || { echo "READ_EXIT 2 local.env 里没有定义 worker_run，见 local.env.example"; exit 2; }
 
 export WORKER_EFFORT="${WORKER_EFFORT:-medium}"
+[ -z "${WORKER_MODEL:-}" ] && type worker_latest_model > /dev/null 2>&1 && WORKER_MODEL="$(worker_latest_model 2>/dev/null)"
 export WORKER_MODEL="${WORKER_MODEL:-}"
 LIMIT="${READ_TIMEOUT:-1200}"
 LOG="$OUT.log"

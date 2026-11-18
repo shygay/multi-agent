@@ -77,11 +77,11 @@ description: |
 | 活 | 派给谁 | 强度起点 | 什么时候调 |
 |---|---|---|---|
 | 读大量代码或资料，只要结论 | 主力子 agent，只读 | low 或 medium | 要下判断、结论要拿去做决定时用 high |
-| 小而独立：核对、对照写表、补文档、给定好的接口补单测 | 轻量子 agent | 默认模型 | 做不好换强模型（`LIGHT_USE_STRONG=1`），再不行转主力子 agent |
+| 小而独立：核对、对照写表、补文档、给定好的接口补单测 | 轻量子 agent | 最新模型 | 做不好换强模型（`LIGHT_USE_STRONG=1`），再不行转主力子 agent |
 | 常规实现 | 主力子 agent | medium | 跨模块、关键路径、打回过一次用 high；机械改动用 low |
 | 验证 | 主力子 agent，只读 | medium | 高风险用 high。不用没有沙箱的子 agent |
 
-- **模型**：默认模型在 `local.env` 里，主路由可以在命令行上用 `WORKER_MODEL`、`LIGHT_MODEL` 换。
+- **模型**：默认用最新的，型号不写死。`local.env` 里的 `worker_latest_model`、`light_latest_model` 在派工时从各 CLI 自己的模型列表现查最新型号，`WORKER_MODEL`、`LIGHT_MODEL` 为空时脚本自动调它们。写死的型号每出一代新模型就过时一次，主路由照着旧名派工也发现不了。主路由可以在命令行上用 `WORKER_MODEL`、`LIGHT_MODEL` 指定；查到的最新型号跑报错（套餐没有、客户端太旧）时，指定上一代并告诉用户。开工第一句写出实际用的型号。
 - **轻量子 agent**：单日上限 `LIGHT_DAILY_MAX`（默认 8）由脚本硬卡；额度或权限报错时当天自动暂停。派给它的活要小而独立，能一次说清；返修超过一次就收回来。
 - **额度用完**：`KICK_QUOTA`、`READ_QUOTA`、`LIGHT_QUOTA` 都不重试，主路由接手做完。
 

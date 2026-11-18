@@ -116,6 +116,10 @@ light_run() {
   echo "假回答"
 }
 if [ "${FAKE_NO_RESUME:-}" = 1 ]; then unset -f worker_resume worker_session_id; fi
+if [ -n "${FAKE_LATEST:-}" ]; then
+  worker_latest_model() { echo "$FAKE_LATEST"; }
+  light_latest_model() { echo "$FAKE_LATEST"; }
+fi
 EOF
 
 echo "=== 4 内容指纹 ==="
@@ -138,6 +142,10 @@ FAKE_READ_LOG="正文提到 usage limit" bash "$K/kick-read.sh" "$C/r2" "$C/p.md
 check "正文提到 usage limit 不算额度用完" "$?" "0"
 FAKE_READ_LOG="You've hit your usage limit" FAKE_READ_EXIT=1 bash "$K/kick-read.sh" "$C/r2" "$C/p.md" "$C/read4.txt" > /dev/null 2>&1
 check "真的额度用完退出码" "$?" "13"
+FAKE_LATEST=new-model bash "$K/kick-read.sh" "$C/r2" "$C/p.md" "$C/read5.txt" > "$C/read5.out" 2>&1
+check "没指定模型时用现查的最新型号" "$(grep -o '模型=[^ ]*' "$C/read5.out")" "模型=new-model"
+FAKE_LATEST=new-model WORKER_MODEL=pinned bash "$K/kick-read.sh" "$C/r2" "$C/p.md" "$C/read6.txt" > "$C/read6.out" 2>&1
+check "指定了模型时不现查" "$(grep -o '模型=[^ ]*' "$C/read6.out")" "模型=pinned"
 
 echo "=== 6 独立验证：脚本的硬校验 ==="
 verify() { # 名称 提交号 命令 假判读
@@ -169,7 +177,7 @@ check "模型写 ready 却没有任何标准，降级成 blocked" "$VERIFY_RC" "
 verify lie2 HEAD "true" '{"status":"ready","criteria":[{"criterion":"a","result":"fail","evidence":""}],"notes":"","human_action":""}'
 check "模型写 ready 却有标准不满足，降级成 failed" "$VERIFY_RC" "21"
 
-echo "=== 7 轻量派工：记账、out 排除、回执、上限、额度暂停、强模型 ==="
+echo "=== 7 轻量派工：记账、out 排除、回执、上限、额度暂停、强模型、现查型号 ==="
 export FAKE_ARGS="$C/fake-args"
 new_repo "$C/r1"
 L="$M/light-ledger.tsv"
@@ -187,6 +195,8 @@ check "额度报错后当天暂停" "$?" "14"
 rm -f "$M/light-paused-on"
 LIGHT_DAILY_MAX=9 LIGHT_USE_STRONG=1 LIGHT_MODEL=weak LIGHT_STRONG_MODEL=strong bash "$K/kick-light.sh" "$C/r1" "$C/p.md" > /dev/null 2>&1
 check "LIGHT_USE_STRONG 用强模型" "$(cat "$FAKE_ARGS")" "strong"
+LIGHT_DAILY_MAX=9 FAKE_LATEST=new-light bash "$K/kick-light.sh" "$C/r1" "$C/p.md" > /dev/null 2>&1
+check "轻量派工没指定模型时用现查的最新型号" "$(cat "$FAKE_ARGS")" "new-light"
 
 echo "=== 8 写入派工：blocked 停下、out 不进提交、多轮、额度 ==="
 loop() { # 场景

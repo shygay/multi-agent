@@ -48,10 +48,12 @@
 
 子 agent 分两种：**主力子 agent** 有沙箱，能只读也能写工作目录；**轻量子 agent** 额度少或者没有沙箱，只接小活，可选。
 
+模型默认用最新的，型号不写死：在 `local.env` 里定义 `worker_latest_model`、`light_latest_model`，派工时从各 CLI 自己的模型列表现查（见 `local.env.example`）。写死的型号每出一代新模型就过时一次。
+
 | 活 | 派给谁 | 强度起点 | 什么时候调 |
 |---|---|---|---|
 | 读大量代码或资料 | 主力子 agent，只读 | low 或 medium | 结论要拿去做决定时用 high |
-| 小而独立的活 | 轻量子 agent | 默认模型 | 做不好换强模型，再不行转主力子 agent |
+| 小而独立的活 | 轻量子 agent | 最新模型 | 做不好换强模型，再不行转主力子 agent |
 | 常规实现 | 主力子 agent | medium | 跨模块、打回过用 high；机械改动用 low |
 | 验证 | 主力子 agent，只读 | medium | 高风险用 high |
 
